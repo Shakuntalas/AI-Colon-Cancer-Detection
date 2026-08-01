@@ -22,14 +22,40 @@ from app.extensions import db
 @login_required
 def index():
     """Render the main dashboard with overview cards and recent activity."""
-    return render_template('dashboard/index.html')
+    from app.models.prediction import Prediction
+    from sqlalchemy import func
+    
+    total = Prediction.query.filter_by(user_id=current_user.id).count()
+    positive = Prediction.query.filter_by(user_id=current_user.id, predicted_class='colon_aca').count()
+    negative = Prediction.query.filter_by(user_id=current_user.id, predicted_class='colon_n').count()
+    avg_conf = db.session.query(func.avg(Prediction.confidence_score)).filter_by(user_id=current_user.id).scalar()
+    avg_conf = (avg_conf * 100) if avg_conf else 0.0
+    
+    recent = Prediction.query.filter_by(user_id=current_user.id).order_by(Prediction.created_at.desc()).limit(5).all()
+    
+    stats = {
+        'total_analyses': total,
+        'positive_cases': positive,
+        'negative_cases': negative,
+        'avg_confidence': round(avg_conf, 1)
+    }
+    
+    return render_template('dashboard/index.html', stats=stats, recent_predictions=recent)
 
 
 @dashboard_bp.route('/stats')
 @login_required
 def stats():
     """Return dashboard statistics (for AJAX chart rendering)."""
-    return {'status': 'ok', 'page': 'dashboard_stats'}, 200
+    from app.models.prediction import Prediction
+    positive = Prediction.query.filter_by(user_id=current_user.id, predicted_class='colon_aca').count()
+    negative = Prediction.query.filter_by(user_id=current_user.id, predicted_class='colon_n').count()
+    
+    return {
+        'status': 'ok',
+        'labels': ['Adenocarcinoma', 'Normal'],
+        'data': [positive, negative]
+    }, 200
 
 
 @dashboard_bp.route('/history')

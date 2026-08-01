@@ -67,42 +67,38 @@ class Predictor:
         RuntimeError
             If the model is not loaded.
         """
-        # TODO: Implement inference
-        #
-        # if model is None:
-        #     from app.ai.model_loader import ModelLoader
-        #     model = ModelLoader().get_model()
-        #
-        # start_time = time.perf_counter()
-        # predictions = model.predict(tensor, verbose=0)
-        # inference_time = (time.perf_counter() - start_time) * 1000
-        #
-        # predicted_index = predictions[0].argmax()
-        # confidence = float(predictions[0][predicted_index])
-        # predicted_class = CLASS_LABELS[predicted_index]
-        #
-        # result = {
-        #     'predicted_class': predicted_class,
-        #     'display_name': CLASS_DISPLAY_NAMES[predicted_class],
-        #     'confidence': round(confidence, 4),
-        #     'confidence_level': self.interpret_confidence(confidence),
-        #     'all_probabilities': {
-        #         CLASS_LABELS[i]: round(float(p), 4)
-        #         for i, p in enumerate(predictions[0])
-        #     },
-        #     'inference_time_ms': round(inference_time, 2),
-        #     'model_version': MODEL_VERSION,
-        # }
-        #
-        # logger.info(
-        #     'Prediction: %s (%.2f%%) in %.1fms',
-        #     result['display_name'],
-        #     confidence * 100,
-        #     inference_time,
-        # )
-        # return result
+        if model is None:
+            from app.ai.model_loader import ModelLoader
+            model = ModelLoader().get_model()
 
-        raise NotImplementedError('Inference not yet implemented.')
+        start_time = time.perf_counter()
+        predictions = model.predict(tensor, verbose=0)
+        inference_time = (time.perf_counter() - start_time) * 1000
+
+        predicted_index = predictions[0].argmax()
+        confidence = float(predictions[0][predicted_index])
+        predicted_class = CLASS_LABELS[predicted_index]
+
+        result = {
+            'predicted_class': predicted_class,
+            'display_name': CLASS_DISPLAY_NAMES[predicted_class],
+            'confidence': round(confidence, 4),
+            'confidence_level': self.interpret_confidence(confidence),
+            'all_probabilities': {
+                CLASS_LABELS[i]: round(float(p), 4)
+                for i, p in enumerate(predictions[0])
+            },
+            'inference_time_ms': round(inference_time, 2),
+            'model_version': MODEL_VERSION,
+        }
+
+        logger.info(
+            'Prediction: %s (%.2f%%) in %.1fms',
+            result['display_name'],
+            confidence * 100,
+            inference_time,
+        )
+        return result
 
     @staticmethod
     def interpret_confidence(confidence):

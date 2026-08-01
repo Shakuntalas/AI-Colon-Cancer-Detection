@@ -30,18 +30,30 @@
     <!-- Navbar -->
     {% include 'components/navbar.html' %}
 
-    <!-- Flash Messages -->
-    <div class="container mt-4 position-absolute top-0 start-50 translate-middle-x" style="z-index: 1050; padding-top: 60px;">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show shadow-sm" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+    <!-- Toast Container for Flash Messages -->
+    <div aria-live="polite" aria-atomic="true" class="position-relative">
+        <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1080; margin-top: 70px;">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% set icon = 'circle-info' %}
+                        {% if category == 'success' %}{% set icon = 'circle-check' %}{% endif %}
+                        {% if category == 'danger' or category == 'error' %}{% set icon = 'circle-xmark' %}{% set category = 'danger' %}{% endif %}
+                        {% if category == 'warning' %}{% set icon = 'triangle-exclamation' %}{% endif %}
+                        
+                        <div class="toast align-items-center text-bg-{{ category }} border-0 shadow" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="4000">
+                            <div class="d-flex">
+                                <div class="toast-body d-flex align-items-center gap-2 fw-medium">
+                                    <i class="fa-solid fa-{{ icon }} fs-5"></i>
+                                    {{ message }}
+                                </div>
+                                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
     </div>
 
     <!-- Main Content -->

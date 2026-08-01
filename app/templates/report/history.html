@@ -29,6 +29,7 @@
                         <td>
                             <a href="{{ url_for('report.download', report_id=1) }}" class="btn btn-sm btn-primary-custom"><i class="fa-solid fa-download me-1"></i> Download</a>
                             <form action="{{ url_for('report.delete', report_id=1) }}" method="POST" class="d-inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
                             </form>
                         </td>

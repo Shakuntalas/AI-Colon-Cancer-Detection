@@ -12,7 +12,7 @@
                     <p class="text-secondary small">Log in to access your dashboard and prediction history.</p>
                 </div>
                 
-                <form action="{{ url_for('auth.login') }}" method="POST">
+                <form action="{{ url_for('auth.login') }}" method="POST" class="needs-validation" novalidate>
                     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="mb-3">
                         <label class="form-label small fw-medium">Email Address</label>

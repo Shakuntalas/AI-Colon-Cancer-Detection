@@ -66,34 +66,70 @@ class ImagePreprocessor:
         ValueError
             If the image cannot be decoded.
         """
-        # TODO: Implement preprocessing pipeline
-        #
-        # import cv2
-        # import numpy as np
-        #
-        # image = cv2.imread(image_path)
-        # if image is None:
-        #     raise ValueError(f'Cannot decode image: {image_path}')
-        #
-        # # BGR → RGB
-        # image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        #
-        # # Resize
-        # image = cv2.resize(image, self.target_size)
-        #
-        # # Normalize
-        # image = image.astype(np.float32) * self.scale_factor
-        #
-        # # Add batch dimension
-        # tensor = np.expand_dims(image, axis=0)
-        #
-        # logger.debug(
-        #     'Preprocessed image %s → shape=%s, dtype=%s',
-        #     image_path, tensor.shape, tensor.dtype,
-        # )
-        # return tensor
+        import cv2
+        import numpy as np
+        
+        # Using Pillow to handle TIFF if cv2 fails, but cv2 can usually handle TIFF.
+        image = cv2.imread(image_path)
+        if image is None:
+            # Fallback to Pillow
+            from PIL import Image
+            try:
+                pil_img = Image.open(image_path).convert('RGB')
+                image = np.array(pil_img)
+                # BGR to RGB is not needed here since we converted to RGB
+            except Exception as e:
+                raise ValueError(f'Cannot decode image: {image_path}. Error: {e}')
+        else:
+            # BGR → RGB
+            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+        
+        # Resize
+        image_resized = cv2.resize(image, self.target_size)
+        
+        # Validation: Check if the image is likely a histopathology image (H&E stained)
+        if not self._is_histopathology_image(image_resized):
+            raise ValueError('The uploaded image does not appear to be a valid H&E stained histopathology image.')
+            
+        # Cast to float32
+        image_float = image_resized.astype(np.float32)
+        
+        # Add batch dimension
+        tensor = np.expand_dims(image_float, axis=0)
+        
+        logger.debug(
+            'Preprocessed image %s → shape=%s, dtype=%s',
+            image_path, tensor.shape, tensor.dtype,
+        )
+        return tensor
 
-        raise NotImplementedError('Image preprocessing not yet implemented.')
+    def _is_histopathology_image(self, image):
+        """
+        Heuristic to check if an image is a valid H&E stained histopathology image.
+        H&E stains are predominantly pink/purple/red.
+        """
+        import numpy as np
+        
+        # Check 1: Not a blank/solid color image (std dev across spatial dims)
+        std_dev = np.mean(np.std(image, axis=(0, 1)))
+        if std_dev < 10.0:
+            return False
+            
+        # Check 2: Color distribution (H&E has high Red and Blue relative to Green)
+        mean_r = np.mean(image[:, :, 0])
+        mean_g = np.mean(image[:, :, 1])
+        mean_b = np.mean(image[:, :, 2])
+        
+        # Typically, in H&E, Red > Green and Blue is also significant.
+        # We allow a bit of tolerance.
+        if mean_r < mean_g - 10:
+            return False
+            
+        # Check 3: Not completely grayscale
+        if abs(mean_r - mean_g) < 5 and abs(mean_r - mean_b) < 5:
+            return False
+            
+        return True
 
     def preprocess_batch(self, image_paths):
         """
@@ -109,8 +145,9 @@ class ImagePreprocessor:
         numpy.ndarray
             Batch tensor with shape (N, H, W, C).
         """
-        # TODO: Implement batch preprocessing
-        raise NotImplementedError('Batch preprocessing not yet implemented.')
+        import numpy as np
+        tensors = [self.preprocess(path)[0] for path in image_paths]
+        return np.array(tensors)
 
     def get_preprocessing_info(self):
         """Return a summary of preprocessing configuration."""

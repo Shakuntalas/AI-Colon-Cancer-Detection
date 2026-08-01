@@ -124,16 +124,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (previewTitle) {
                     previewTitle.textContent = "Selected: " + file.name;
                 }
-                // Optional: image preview logic can go here
-                
                 // Show submit button or auto-submit
                 const submitBtn = document.getElementById('submitUpload');
                 if(submitBtn) {
                     submitBtn.style.display = 'inline-block';
-                    // simple animation
                     gsap.from(submitBtn, {scale: 0.9, opacity: 0, duration: 0.3});
                 }
             }
         }
     }
+
+    // 6. Bootstrap Toast Initialization
+    const toastElList = document.querySelectorAll('.toast')
+    const toastList = [...toastElList].map(toastEl => new bootstrap.Toast(toastEl, {autohide: true, delay: 4000}))
+    toastList.forEach(toast => toast.show());
+
+    // 7. HTML5 Form Validation
+    const forms = document.querySelectorAll('.needs-validation')
+    Array.from(forms).forEach(form => {
+        form.addEventListener('submit', event => {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    });
 });

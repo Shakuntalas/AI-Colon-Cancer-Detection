@@ -89,6 +89,9 @@ a:hover {
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+.hover-text-primary:hover {
+  color: var(--primary-color) !important;
+}
 
 /* Glassmorphism */
 .glass {

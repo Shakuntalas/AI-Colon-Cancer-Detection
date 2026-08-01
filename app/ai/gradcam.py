@@ -84,75 +84,89 @@ class GradCAMGenerator:
         str
             Absolute path to the saved heatmap overlay image.
         """
-        # TODO: Implement Grad-CAM generation
-        #
-        # Steps:
-        # 1. Load and preprocess the image
-        # 2. Create a gradient model (input → [conv_output, prediction])
-        # 3. Compute gradients of the target class w.r.t. conv layer output
-        # 4. Pool gradients and weight feature maps
-        # 5. Generate heatmap and resize to original dimensions
-        # 6. Apply colormap and overlay on original image
-        # 7. Save to HEATMAP_OUTPUT_DIR
-        #
-        # import tensorflow as tf
-        # import numpy as np
-        # import cv2
-        #
-        # # Build gradient model
-        # grad_model = tf.keras.models.Model(
-        #     inputs=model.input,
-        #     outputs=[
-        #         model.get_layer(self.layer_name).output,
-        #         model.output,
-        #     ],
-        # )
-        #
-        # # ... (compute gradients, generate heatmap) ...
-        #
-        # heatmap_filename = f'gradcam_{os.path.basename(image_path)}'
-        # heatmap_path = os.path.join(self.output_dir, heatmap_filename)
-        # cv2.imwrite(heatmap_path, overlay)
-        # return heatmap_path
+        import tensorflow as tf
+        import numpy as np
+        import cv2
+        from app.ai.preprocessor import ImagePreprocessor
 
-        raise NotImplementedError('Grad-CAM generation not yet implemented.')
+        os.makedirs(self.output_dir, exist_ok=True)
+        
+        # 1. Load and preprocess the image
+        preprocessor = ImagePreprocessor()
+        image_tensor = preprocessor.preprocess(image_path)
+        
+        # 2. Compute heatmap
+        heatmap = self.compute_heatmap(image_tensor, model, predicted_class_index)
+        
+        # 3. Load original image for overlay
+        original_image = cv2.imread(image_path)
+        if original_image is None:
+            from PIL import Image
+            pil_img = Image.open(image_path).convert('RGB')
+            original_image = np.array(pil_img)
+            # Convert RGB to BGR for cv2 saving
+            original_image = cv2.cvtColor(original_image, cv2.COLOR_RGB2BGR)
+            
+        # 4. Apply colormap and overlay on original image
+        overlay = self.overlay_heatmap(original_image, heatmap)
+        
+        # 5. Save to HEATMAP_OUTPUT_DIR
+        import uuid
+        heatmap_filename = f'gradcam_{uuid.uuid4().hex[:8]}.jpg'
+        heatmap_path = os.path.join(self.output_dir, heatmap_filename)
+        cv2.imwrite(heatmap_path, overlay)
+        
+        # Return path relative to static/ or however it is served. Wait, it is in data/heatmaps.
+        # Flask usually serves from data/heatmaps or static. Let's return absolute path or basename.
+        # The prompt says 'heatmap_path : str - path to Grad-CAM heatmap overlay'. 
+        return heatmap_path
 
     def compute_heatmap(self, image_tensor, model, class_index):
-        """
-        Compute the raw Grad-CAM heatmap array.
+        import tensorflow as tf
+        import numpy as np
+        
+        # Initialize model inputs to avoid 'layer sequential has never been called' error
+        _ = model(tf.zeros((1, 224, 224, 3)))
+        
+        base_model = model.layers[0]
+        target_layer = base_model.get_layer(self.layer_name)
+        
+        grad_model = tf.keras.models.Model(
+            inputs=base_model.inputs,
+            outputs=[target_layer.output, base_model.output]
+        )
 
-        Parameters
-        ----------
-        image_tensor : numpy.ndarray
-            Preprocessed image tensor (1, H, W, C).
-        model : tf.keras.Model
-            The loaded model.
-        class_index : int
-            Target class index.
+        with tf.GradientTape() as tape:
+            conv_outputs, base_output = grad_model(image_tensor)
+            
+            # Forward pass through the rest of the Sequential model
+            x = base_output
+            for layer in model.layers[1:]:
+                x = layer(x)
+            predictions = x
+            
+            loss = predictions[:, class_index]
 
-        Returns
-        -------
-        numpy.ndarray
-            Heatmap array of shape (H, W) with values in [0, 1].
-        """
-        # TODO: Implement heatmap computation
-        raise NotImplementedError
+        grads = tape.gradient(loss, conv_outputs)
+        pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
+        
+        conv_outputs = conv_outputs[0]
+        heatmap = conv_outputs @ pooled_grads[..., tf.newaxis]
+        heatmap = tf.squeeze(heatmap)
+        
+        heatmap = tf.maximum(heatmap, 0) / tf.math.reduce_max(heatmap)
+        return heatmap.numpy()
 
     def overlay_heatmap(self, original_image, heatmap):
-        """
-        Overlay the heatmap on the original image.
-
-        Parameters
-        ----------
-        original_image : numpy.ndarray
-            Original image array (H, W, C) in RGB.
-        heatmap : numpy.ndarray
-            Heatmap array (H, W) normalised to [0, 1].
-
-        Returns
-        -------
-        numpy.ndarray
-            Overlay image (H, W, C) in BGR (for cv2.imwrite).
-        """
-        # TODO: Implement heatmap overlay
-        raise NotImplementedError
+        import cv2
+        import numpy as np
+        
+        # Resize heatmap to match original image
+        heatmap = cv2.resize(heatmap, (original_image.shape[1], original_image.shape[0]))
+        
+        # Apply colormap
+        heatmap_colored = cv2.applyColorMap(np.uint8(255 * heatmap), cv2.COLORMAP_JET)
+        
+        # Superimpose
+        overlay = cv2.addWeighted(original_image, 1 - self.alpha, heatmap_colored, self.alpha, 0)
+        return overlay

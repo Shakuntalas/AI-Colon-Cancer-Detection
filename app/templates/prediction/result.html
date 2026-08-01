@@ -4,8 +4,8 @@
 {% block content %}
 <div class="container py-5 mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4 gsap-fade-in">
-        <h2 class="fw-bold mb-0">Analysis Result #{{ prediction_id }}</h2>
-        <a href="{{ url_for('dashboard.history') }}" class="btn btn-premium-outline"><i class="fa-solid fa-arrow-left me-2"></i>Back to History</a>
+        <h2 class="fw-bold mb-0">Analysis Result #{{ prediction.id }}</h2>
+        <a href="{{ url_for('prediction.history') }}" class="btn btn-premium-outline"><i class="fa-solid fa-arrow-left me-2"></i>Back to History</a>
     </div>
 
     <div class="row g-4">
@@ -13,32 +13,40 @@
             <div class="glass-card p-4 text-center h-100 d-flex flex-column justify-content-center">
                 <h6 class="text-secondary fw-bold text-uppercase mb-2">Classification</h6>
                 <div class="py-3">
-                    <i class="fa-solid fa-virus-slash text-danger display-1 mb-3"></i>
-                    <h3 class="fw-bold text-danger">Adenocarcinoma</h3>
+                    {% if prediction.predicted_class == 'colon_aca' %}
+                        <i class="fa-solid fa-virus-slash text-danger display-1 mb-3"></i>
+                        <h3 class="fw-bold text-danger">Adenocarcinoma</h3>
+                    {% else %}
+                        <i class="fa-solid fa-shield-heart text-success display-1 mb-3"></i>
+                        <h3 class="fw-bold text-success">Normal Tissue</h3>
+                    {% endif %}
                 </div>
                 
                 <hr class="border-secondary opacity-25 my-4">
                 
                 <h6 class="text-secondary fw-bold text-uppercase mb-2">Confidence Score</h6>
-                <h2 class="fw-bold text-primary-custom mb-0">98.5%</h2>
+                <h2 class="fw-bold text-primary-custom mb-0">{{ "%.2f"|format(prediction.confidence_score * 100) }}%</h2>
             </div>
         </div>
         
         <div class="col-lg-8 gsap-fade-in" style="transition-delay: 100ms;">
-            <div class="glass-card p-4 h-100">
-                <div class="row h-100 align-items-center">
-                    <div class="col-md-6 text-center border-end border-secondary border-opacity-25">
-                        <h6 class="fw-bold mb-3">Original Image</h6>
-                        <!-- Placeholder Image -->
-                        <div class="bg-surface-color-alt rounded d-flex align-items-center justify-content-center" style="height: 300px; border: 1px solid var(--border-color);">
-                            <i class="fa-regular fa-image text-muted fs-1"></i>
+            <div class="glass-card p-4 h-100 position-relative">
+                <h5 class="fw-bold mb-4 text-center text-md-start"><i class="fa-solid fa-layer-group text-primary-custom me-2"></i>Analysis Visualizations</h5>
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm overflow-hidden h-100">
+                            <div class="card-header bg-surface-color-alt border-0 py-2">
+                                <span class="small fw-bold text-secondary text-uppercase"><i class="fa-solid fa-image me-1"></i> Original Tissue</span>
+                            </div>
+                            <img src="{{ url_for('prediction.serve_image', filename=prediction.original_image_path.split('\\')[-1].split('/')[-1]) }}" alt="Original Image" class="img-fluid w-100" style="aspect-ratio: 1; object-fit: cover;">
                         </div>
                     </div>
-                    <div class="col-md-6 text-center">
-                        <h6 class="fw-bold mb-3">Grad-CAM Overlay</h6>
-                        <div class="bg-surface-color-alt rounded d-flex align-items-center justify-content-center position-relative" style="height: 300px; border: 1px solid var(--border-color);">
-                            <i class="fa-solid fa-layer-group text-primary-custom fs-1 opacity-50"></i>
-                            <div class="position-absolute top-0 start-0 w-100 h-100" style="background: radial-gradient(circle, rgba(239,68,68,0.2) 0%, rgba(255,255,255,0) 70%);"></div>
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm overflow-hidden h-100">
+                            <div class="card-header bg-surface-color-alt border-0 py-2">
+                                <span class="small fw-bold text-secondary text-uppercase"><i class="fa-solid fa-fire me-1 text-danger"></i> Grad-CAM Attention</span>
+                            </div>
+                            <img src="{{ url_for('prediction.serve_heatmap', filename=prediction.heatmap_image_path.split('\\')[-1].split('/')[-1]) }}" alt="Grad-CAM Overlay" class="img-fluid w-100" style="aspect-ratio: 1; object-fit: cover;">
                         </div>
                     </div>
                 </div>
@@ -47,10 +55,8 @@
     </div>
     
     <div class="mt-4 text-center gsap-fade-in" style="transition-delay: 200ms;">
-        <a href="{{ url_for('prediction.gradcam', prediction_id=prediction_id) }}" class="btn btn-premium-outline me-2">Full Grad-CAM Analysis</a>
-        <form action="{{ url_for('report.generate', prediction_id=prediction_id) }}" method="POST" class="d-inline">
-            <button type="submit" class="btn btn-premium"><i class="fa-solid fa-file-pdf me-2"></i>Generate PDF Report</button>
-        </form>
+        <a href="{{ url_for('prediction.gradcam', prediction_id=prediction.id) }}" class="btn btn-premium-outline me-2">Full Grad-CAM Analysis</a>
+        <a href="{{ url_for('prediction.download_report', prediction_id=prediction.id) }}" class="btn btn-premium"><i class="fa-solid fa-file-pdf me-2"></i>Download PDF Report</a>
     </div>
 </div>
 {% endblock %}

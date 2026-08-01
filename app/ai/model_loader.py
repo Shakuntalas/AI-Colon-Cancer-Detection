@@ -69,28 +69,22 @@ class ModelLoader:
 
     def _load_model(self):
         """Load the model weights from disk."""
-        # TODO: Implement model loading
-        #
-        # import tensorflow as tf
-        #
-        # if not os.path.exists(MODEL_PATH):
-        #     raise FileNotFoundError(
-        #         f'Model file not found: {MODEL_PATH}. '
-        #         'Please train the model first using scripts/train_model.py'
-        #     )
-        #
-        # logger.info('Loading %s model from %s ...', MODEL_NAME, MODEL_PATH)
-        # self._model = tf.keras.models.load_model(MODEL_PATH)
-        # self._is_loaded = True
-        # logger.info(
-        #     '%s v%s loaded successfully. '
-        #     'Input shape: %s, Output classes: %s',
-        #     MODEL_NAME, MODEL_VERSION,
-        #     self._model.input_shape, self._model.output_shape,
-        # )
-        logger.warning(
-            'Model loading is not yet implemented. '
-            'Place your trained model at: %s', MODEL_PATH
+        import tensorflow as tf
+
+        if not os.path.exists(MODEL_PATH):
+            raise FileNotFoundError(
+                f'Model file not found: {MODEL_PATH}. '
+                'Please train the model first using scripts/train_model.py'
+            )
+
+        logger.info('Loading %s model from %s ...', MODEL_NAME, MODEL_PATH)
+        self._model = tf.keras.models.load_model(MODEL_PATH)
+        self._is_loaded = True
+        logger.info(
+            '%s v%s loaded successfully. '
+            'Input shape: %s, Output classes: %s',
+            MODEL_NAME, MODEL_VERSION,
+            self._model.input_shape, self._model.output_shape,
         )
 
     def is_loaded(self):

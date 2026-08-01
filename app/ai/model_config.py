@@ -17,14 +17,14 @@ _BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 # ═══════════════════════════════════════════════════════════════════════════
 MODEL_NAME = 'EfficientNetB0'
 MODEL_VERSION = '1.0.0'
-MODEL_PATH = os.path.join(_BASE_DIR, 'data', 'models', 'efficientnetb0_colon.h5')
+MODEL_PATH = os.path.join(_BASE_DIR, 'trained_models', 'efficientnetb0_colon.h5')
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Image Preprocessing
 # ═══════════════════════════════════════════════════════════════════════════
 IMAGE_SIZE = (224, 224)         # EfficientNetB0 default input size
 IMAGE_CHANNELS = 3              # RGB
-PIXEL_SCALE_FACTOR = 1.0 / 255  # Normalize to [0, 1]
+PIXEL_SCALE_FACTOR = 1.0  # EfficientNetB0 has internal scaling
 
 # ═══════════════════════════════════════════════════════════════════════════
 # Class Labels
