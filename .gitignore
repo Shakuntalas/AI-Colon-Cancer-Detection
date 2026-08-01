@@ -216,3 +216,39 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# ═══════════════════════════════════════════════════════════════════════════
+# ColonSightAI — Project-Specific Ignores
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Runtime data (keep directory structure via .gitkeep)
+data/uploads/*
+!data/uploads/.gitkeep
+data/heatmaps/*
+!data/heatmaps/.gitkeep
+data/reports/*
+!data/reports/.gitkeep
+data/database/*
+!data/database/.gitkeep
+
+# Trained model weights (large binary files)
+data/models/*.h5
+data/models/*.hdf5
+data/models/*.keras
+data/models/*.tflite
+data/models/*.pb
+!data/models/.gitkeep
+
+# Application logs
+logs/*
+!logs/.gitkeep
+
+# Flask instance folder
+instance/
+
+# IDE settings
+.vscode/
+.idea/
+
+# Dataset (not tracked in repo)
+data/dataset/

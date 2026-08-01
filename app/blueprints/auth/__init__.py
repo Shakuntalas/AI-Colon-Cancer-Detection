@@ -1,0 +1,20 @@
+"""
+ColonSightAI — Auth Blueprint
+===============================
+
+Handles all authentication-related flows:
+    - User login
+    - User registration
+    - Logout
+    - Forgot password / password reset
+"""
+
+from flask import Blueprint
+
+auth_bp = Blueprint(
+    'auth',
+    __name__,
+    template_folder='../../templates/auth',
+)
+
+from app.blueprints.auth import routes  # noqa: E402, F401
