@@ -11,4 +11,6 @@ Services:
     - **PredictionService** — Orchestrates the AI prediction pipeline
     - **ReportService** — PDF diagnostic report generation
     - **ImageService** — Image validation, processing, and storage
+    - **DatasetService** — Dataset management, validation, and splitting
 """
+

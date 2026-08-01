@@ -1,0 +1,77 @@
+# ===========================================================================
+# ColonSightAI — Docker Compose (Placeholder)
+# ===========================================================================
+# This file is prepared for future multi-container deployment.
+# DO NOT use in production until fully implemented and tested.
+#
+# Usage:
+#     docker-compose up -d
+#     docker-compose down
+#     docker-compose logs -f
+# ===========================================================================
+
+# version: '3.9'
+#
+# services:
+#   # ── Web Application ──────────────────────────────────────────────────
+#   web:
+#     build:
+#       context: .
+#       dockerfile: Dockerfile
+#     container_name: colonsightai-web
+#     restart: unless-stopped
+#     ports:
+#       - "8000:8000"
+#     env_file:
+#       - .env
+#     volumes:
+#       - upload_data:/app/data/uploads
+#       - heatmap_data:/app/data/heatmaps
+#       - report_data:/app/data/reports
+#       - model_data:/app/data/models
+#       - db_data:/app/data/database
+#       - log_data:/app/logs
+#     healthcheck:
+#       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+#       start_period: 10s
+#     networks:
+#       - colonsightai-network
+#
+#   # ── Nginx Reverse Proxy (Future) ─────────────────────────────────────
+#   # nginx:
+#   #   image: nginx:alpine
+#   #   container_name: colonsightai-nginx
+#   #   restart: unless-stopped
+#   #   ports:
+#   #     - "80:80"
+#   #     - "443:443"
+#   #   volumes:
+#   #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+#   #     - ./nginx/ssl:/etc/nginx/ssl:ro
+#   #   depends_on:
+#   #     - web
+#   #   networks:
+#   #     - colonsightai-network
+#
+# # ── Persistent Volumes ─────────────────────────────────────────────────
+# volumes:
+#   upload_data:
+#     driver: local
+#   heatmap_data:
+#     driver: local
+#   report_data:
+#     driver: local
+#   model_data:
+#     driver: local
+#   db_data:
+#     driver: local
+#   log_data:
+#     driver: local
+#
+# # ── Network ────────────────────────────────────────────────────────────
+# networks:
+#   colonsightai-network:
+#     driver: bridge

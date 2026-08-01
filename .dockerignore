@@ -1,0 +1,69 @@
+# ===========================================================================
+# ColonSightAI — Docker Ignore
+# ===========================================================================
+# Files and directories excluded from Docker build context to reduce
+# image size and prevent sensitive data from being included.
+# ===========================================================================
+
+# ── Version Control ───────────────────────────────────────────────────────
+.git
+.gitignore
+
+# ── Python Cache ──────────────────────────────────────────────────────────
+__pycache__
+*.py[cod]
+*.pyo
+.pytest_cache
+.mypy_cache
+.ruff_cache
+
+# ── Virtual Environments ─────────────────────────────────────────────────
+.venv
+venv
+env
+ENV
+
+# ── Environment Files (use --env-file instead) ────────────────────────────
+.env
+.flaskenv
+
+# ── IDE Settings ──────────────────────────────────────────────────────────
+.vscode
+.idea
+*.swp
+*.swo
+
+# ── Runtime Data (mounted as volumes) ────────────────────────────────────
+data/uploads/*
+data/heatmaps/*
+data/reports/*
+data/database/*
+uploads/*
+heatmaps/*
+reports/*
+logs/*
+
+# ── Large Files ──────────────────────────────────────────────────────────
+data/models/*.h5
+data/models/*.keras
+trained_models/*.h5
+trained_models/*.keras
+datasets/
+
+# ── Documentation (not needed in container) ──────────────────────────────
+docs/
+research/
+*.md
+!README.md
+
+# ── Tests (not needed in production image) ────────────────────────────────
+tests/
+
+# ── Docker Files ──────────────────────────────────────────────────────────
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# ── OS Files ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db

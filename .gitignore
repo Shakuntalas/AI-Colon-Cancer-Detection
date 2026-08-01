@@ -252,3 +252,35 @@ instance/
 
 # Dataset (not tracked in repo)
 data/dataset/
+
+# ── Top-Level Runtime Directories ─────────────────────────────────────────
+# (Parallel directories for direct access outside the data/ namespace)
+
+uploads/*
+!uploads/.gitkeep
+!uploads/README.md
+
+heatmaps/*
+!heatmaps/.gitkeep
+!heatmaps/README.md
+
+reports/*
+!reports/.gitkeep
+!reports/README.md
+
+trained_models/*.h5
+trained_models/*.hdf5
+trained_models/*.keras
+trained_models/*.tflite
+trained_models/*.pb
+!trained_models/.gitkeep
+!trained_models/README.md
+
+datasets/*
+!datasets/.gitkeep
+!datasets/README.md
+
+# ── Docker ────────────────────────────────────────────────────────────────
+# Uncomment when Docker is fully implemented
+# docker-compose.override.yml
+
