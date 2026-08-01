@@ -13,46 +13,47 @@ Routes:
     GET /research        Research highlights
 """
 
+from flask import render_template
 from app.blueprints.main import main_bp
 
 
 @main_bp.route('/')
 def landing():
     """Render the landing page with hero, features, workflow, and stats."""
-    # TODO: Implement landing page template
-    return {'status': 'ok', 'page': 'landing'}, 200
+    return render_template('main/landing.html')
 
 
 @main_bp.route('/about')
 def about():
     """Render the About page with project details and team info."""
-    # TODO: Implement about page template
-    return {'status': 'ok', 'page': 'about'}, 200
+    return render_template('main/about.html')
 
 
 @main_bp.route('/technology')
 def technology():
     """Render the Technology page with stack details."""
-    # TODO: Implement technology page template
-    return {'status': 'ok', 'page': 'technology'}, 200
+    return render_template('main/technology.html')
 
 
 @main_bp.route('/workflow')
 def workflow():
     """Render the AI Workflow visualization page."""
-    # TODO: Implement workflow page template
-    return {'status': 'ok', 'page': 'workflow'}, 200
+    return render_template('main/workflow.html')
 
 
 @main_bp.route('/dataset')
 def dataset():
     """Render the Dataset Information page."""
-    # TODO: Implement dataset page template
-    return {'status': 'ok', 'page': 'dataset'}, 200
+    return render_template('main/dataset.html')
 
 
 @main_bp.route('/research')
 def research():
     """Render the Research Highlights page."""
-    # TODO: Implement research page template
-    return {'status': 'ok', 'page': 'research'}, 200
+    return render_template('main/research.html')
+
+
+@main_bp.route('/contact')
+def contact():
+    """Render the Contact page."""
+    return render_template('main/contact.html')

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block title %}ColonSightAI - Advanced Colon Cancer Detection{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg-shape"></div>
+    <div class="container">
+        <div class="row align-items-center min-vh-100 py-5">
+            <div class="col-lg-6" data-aos="fade-right">
+                <span class="badge bg-primary-custom px-3 py-2 rounded-pill mb-3 shadow-sm">v2.0 Beta Available</span>
+                <h1 class="display-4 fw-bolder mb-4 leading-tight">
+                    Next-Generation <br>
+                    <span class="text-gradient">Histopathology</span> Analysis
+                </h1>
+                <p class="lead text-secondary mb-5">
+                    Empowering pathologists with deep learning. Achieve 98% accuracy in colon adenocarcinoma detection through advanced EfficientNet architectures and explainable AI.
+                </p>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-premium btn-lg">Get Started</a>
+                    <a href="{{ url_for('main.workflow') }}" class="btn btn-premium-outline btn-lg d-flex align-items-center gap-2">
+                        <i class="fa-solid fa-play"></i> View Workflow
+                    </a>
+                </div>
+                
+                <div class="mt-5 d-flex gap-4 align-items-center pt-4 border-top">
+                    <div>
+                        <h3 class="fw-bold mb-0">98.5%</h3>
+                        <p class="small text-secondary mb-0">Validation Accuracy</p>
+                    </div>
+                    <div class="vr bg-secondary opacity-25"></div>
+                    <div>
+                        <h3 class="fw-bold mb-0">&lt;2s</h3>
+                        <p class="small text-secondary mb-0">Inference Time</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-lg-6 mt-5 mt-lg-0 position-relative" data-aos="fade-left" data-aos-delay="200">
+                <!-- Abstract Premium Illustration Placeholder -->
+                <div class="glass-card p-4 position-relative">
+                    <div class="bg-surface-color-alt rounded-3 overflow-hidden d-flex align-items-center justify-content-center" style="height: 450px; background: linear-gradient(135deg, rgba(15,118,110,0.1), rgba(139,92,246,0.1));">
+                        <div class="text-center">
+                            <i class="fa-solid fa-microscope text-gradient display-1 mb-3"></i>
+                            <h4 class="text-secondary fw-semibold">AI Analysis Interface</h4>
+                            <p class="text-muted small">Upload histopathological images for instant inference.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Floating overlay card -->
+                    <div class="position-absolute glass rounded p-3 d-flex align-items-center gap-3 shadow" style="bottom: -20px; left: -20px;">
+                        <div class="bg-success text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <div>
+                            <p class="mb-0 fw-bold small">Analysis Complete</p>
+                            <p class="mb-0 text-secondary" style="font-size: 0.75rem;">Benign Tissue Detected</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-surface-color-alt">
+    <div class="container py-5">
+        <div class="text-center mb-5" data-aos="fade-up">
+            <h2 class="fw-bold mb-3">Why Choose ColonSightAI</h2>
+            <p class="text-secondary mx-auto" style="max-width: 600px;">Our platform bridges the gap between state-of-the-art machine learning research and practical clinical application.</p>
+        </div>
+        
+        <div class="row g-4">
+            <!-- Feature 1 -->
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="glass-card p-4 h-100">
+                    <div class="text-primary-custom fs-1 mb-3">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
+                    <h5 class="fw-bold">Rapid Inference</h5>
+                    <p class="text-secondary small">Process high-resolution whole slide image patches in milliseconds using optimized ONNX runtimes.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 2 -->
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="glass-card p-4 h-100">
+                    <div class="text-primary-custom fs-1 mb-3">
+                        <i class="fa-solid fa-eye"></i>
+                    </div>
+                    <h5 class="fw-bold">Explainable AI</h5>
+                    <p class="text-secondary small">Generate intuitive Grad-CAM heatmaps that highlight the exact regions influencing the model's decision.</p>
+                </div>
+            </div>
+            
+            <!-- Feature 3 -->
+            <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="glass-card p-4 h-100">
+                    <div class="text-primary-custom fs-1 mb-3">
+                        <i class="fa-solid fa-shield-halved"></i>
+                    </div>
+                    <h5 class="fw-bold">Clinical Grade Security</h5>
+                    <p class="text-secondary small">Built with HIPAA compliance in mind. All uploaded data is processed securely and encrypted at rest.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

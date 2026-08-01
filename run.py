@@ -26,14 +26,14 @@ if __name__ == '__main__':
     debug = config_name == 'development'
 
     print(f"""
-    ╔══════════════════════════════════════════════════╗
-    ║           ColonSightAI — Dev Server              ║
-    ║──────────────────────────────────────────────────║
-    ║  Host   : {host:<38s} ║
-    ║  Port   : {port:<38d} ║
-    ║  Debug  : {str(debug):<38s} ║
-    ║  Config : {config_name:<38s} ║
-    ╚══════════════════════════════════════════════════╝
+    ====================================================
+               ColonSightAI - Dev Server              
+    ----------------------------------------------------
+      Host   : {host:<38s} 
+      Port   : {port:<38d} 
+      Debug  : {str(debug):<38s} 
+      Config : {config_name:<38s} 
+    ====================================================
     """)
 
     app.run(host=host, port=port, debug=debug)

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}About - ColonSightAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5 gsap-fade-in">
+        <h1 class="display-5 fw-bold text-gradient mb-3">About The Project</h1>
+        <p class="lead text-secondary mx-auto" style="max-width: 700px;">
+            Developing scalable, robust, and explainable AI solutions for histopathological image analysis.
+        </p>
+    </div>
+
+    <div class="row align-items-center mb-5 py-4">
+        <div class="col-lg-6 mb-4 mb-lg-0 gsap-fade-in">
+            <div class="glass-card p-4 d-flex align-items-center justify-content-center" style="height: 350px;">
+                <i class="fa-solid fa-users text-muted opacity-25" style="font-size: 8rem;"></i>
+            </div>
+        </div>
+        <div class="col-lg-6 ps-lg-5 gsap-fade-in">
+            <h3 class="fw-bold mb-3">Our Mission</h3>
+            <p class="text-secondary mb-4">
+                Colon cancer is one of the leading causes of cancer-related deaths worldwide. Early detection through histopathological examination is critical. Our mission is to provide an accessible, AI-driven second opinion tool that helps pathologists diagnose colon adenocarcinoma with greater speed and confidence.
+            </p>
+            <ul class="list-unstyled d-flex flex-column gap-2 text-secondary">
+                <li><i class="fa-solid fa-check text-success me-2"></i> Reduce diagnostic turnaround time</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Minimize inter-observer variability</li>
+                <li><i class="fa-solid fa-check text-success me-2"></i> Democratize access to advanced diagnostics</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

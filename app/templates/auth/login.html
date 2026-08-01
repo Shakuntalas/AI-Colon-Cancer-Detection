@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Log In - ColonSightAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5 gsap-fade-in">
+            <div class="glass-card p-5">
+                <div class="text-center mb-4">
+                    <i class="fa-solid fa-microscope text-primary-custom fs-1 mb-3"></i>
+                    <h3 class="fw-bold">Welcome Back</h3>
+                    <p class="text-secondary small">Log in to access your dashboard and prediction history.</p>
+                </div>
+                
+                <form action="{{ url_for('auth.login') }}" method="POST">
+                    <div class="mb-3">
+                        <label class="form-label small fw-medium">Email Address</label>
+                        <input type="email" class="form-control form-control-custom" placeholder="name@example.com" required>
+                    </div>
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between align-items-center mb-1">
+                            <label class="form-label small fw-medium mb-0">Password</label>
+                            <a href="{{ url_for('auth.forgot_password') }}" class="small text-decoration-none">Forgot password?</a>
+                        </div>
+                        <input type="password" class="form-control form-control-custom" placeholder="••••••••" required>
+                    </div>
+                    <div class="mb-4 form-check">
+                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label small" for="rememberMe">Remember me</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-premium w-100 mb-4">Log In</button>
+                    
+                    <div class="text-center small text-secondary">
+                        Don't have an account? <a href="{{ url_for('auth.register') }}" class="text-decoration-none fw-bold">Sign Up</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -12,39 +12,35 @@ Routes:
     GET /dashboard/profile     User profile
 """
 
+from flask import render_template
 from app.blueprints.dashboard import dashboard_bp
 
 
 @dashboard_bp.route('/')
 def index():
     """Render the main dashboard with overview cards and recent activity."""
-    # TODO: Implement dashboard template with stats, charts, recent predictions
-    return {'status': 'ok', 'page': 'dashboard'}, 200
+    return render_template('dashboard/index.html')
 
 
 @dashboard_bp.route('/stats')
 def stats():
     """Return dashboard statistics (for AJAX chart rendering)."""
-    # TODO: Query prediction counts, accuracy distribution, time-series data
     return {'status': 'ok', 'page': 'dashboard_stats'}, 200
 
 
 @dashboard_bp.route('/history')
 def history():
     """Render full prediction history with filters and pagination."""
-    # TODO: Implement paginated history table
-    return {'status': 'ok', 'page': 'prediction_history'}, 200
+    return render_template('dashboard/history.html')
 
 
 @dashboard_bp.route('/settings')
 def settings():
     """Render user settings page."""
-    # TODO: Implement settings form (theme, notifications, etc.)
-    return {'status': 'ok', 'page': 'settings'}, 200
+    return render_template('dashboard/settings.html')
 
 
 @dashboard_bp.route('/profile')
 def profile():
     """Render user profile page."""
-    # TODO: Implement profile view and edit form
-    return {'status': 'ok', 'page': 'profile'}, 200
+    return render_template('dashboard/profile.html')

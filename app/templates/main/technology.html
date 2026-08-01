@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Technology - ColonSightAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5 gsap-fade-in">
+        <h1 class="display-5 fw-bold mb-3">Technology Stack</h1>
+        <p class="text-secondary mx-auto" style="max-width: 600px;">Built on modern, scalable architectures to ensure performance and reliability.</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-4 gsap-fade-in">
+            <div class="glass-card p-4 h-100 border-top border-primary border-4">
+                <h5 class="fw-bold mb-3"><i class="fa-brands fa-python text-primary-custom me-2"></i> Machine Learning</h5>
+                <p class="small text-secondary mb-0">Powered by PyTorch and EfficientNet architectures. Utilizing transfer learning and Grad-CAM for visual explainability.</p>
+            </div>
+        </div>
+        <div class="col-md-4 gsap-fade-in" style="transition-delay: 100ms;">
+            <div class="glass-card p-4 h-100 border-top border-primary border-4">
+                <h5 class="fw-bold mb-3"><i class="fa-solid fa-server text-primary-custom me-2"></i> Backend API</h5>
+                <p class="small text-secondary mb-0">Robust Flask server with Blueprint architecture, SQLAlchemy ORM, and comprehensive RESTful endpoints.</p>
+            </div>
+        </div>
+        <div class="col-md-4 gsap-fade-in" style="transition-delay: 200ms;">
+            <div class="glass-card p-4 h-100 border-top border-primary border-4">
+                <h5 class="fw-bold mb-3"><i class="fa-brands fa-html5 text-primary-custom me-2"></i> Frontend UI</h5>
+                <p class="small text-secondary mb-0">Responsive interface crafted with Bootstrap 5, Jinja templating, GSAP animations, and custom CSS variables.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

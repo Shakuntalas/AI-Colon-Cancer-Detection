@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Prediction History - ColonSightAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 gsap-fade-in">
+        <h2 class="fw-bold mb-0">Full Prediction History</h2>
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-premium-outline">Dashboard</a>
+    </div>
+
+    <!-- Reusing similar structure from dashboard/history but dedicated to prediction blueprint -->
+    <div class="glass-card p-4 gsap-fade-in">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr class="text-secondary small">
+                        <th>ID</th>
+                        <th>Upload Date</th>
+                        <th>Status</th>
+                        <th>Classification</th>
+                        <th>Confidence</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#1024</td>
+                        <td>Oct 24, 2023 - 10:42 AM</td>
+                        <td><span class="badge bg-success">Completed</span></td>
+                        <td><span class="text-danger fw-bold">Adenocarcinoma</span></td>
+                        <td>98.5%</td>
+                        <td>
+                            <a href="{{ url_for('prediction.result', prediction_id=1024) }}" class="btn btn-sm btn-light">View Details</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>#1023</td>
+                        <td>Oct 23, 2023 - 2:15 PM</td>
+                        <td><span class="badge bg-success">Completed</span></td>
+                        <td><span class="text-success fw-bold">Benign</span></td>
+                        <td>99.1%</td>
+                        <td>
+                            <a href="{{ url_for('prediction.result', prediction_id=1023) }}" class="btn btn-sm btn-light">View Details</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

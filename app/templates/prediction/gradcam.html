@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Grad-CAM Analysis - ColonSightAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 gsap-fade-in">
+        <h2 class="fw-bold mb-0">Grad-CAM Visualization</h2>
+        <a href="{{ url_for('prediction.result', prediction_id=prediction_id) }}" class="btn btn-premium-outline"><i class="fa-solid fa-arrow-left me-2"></i>Back to Result</a>
+    </div>
+
+    <div class="glass-card p-4 gsap-fade-in">
+        <div class="row align-items-center">
+            <div class="col-lg-7 text-center">
+                <div class="bg-surface-color-alt rounded-3 border d-flex align-items-center justify-content-center position-relative overflow-hidden" style="min-height: 500px;">
+                    <i class="fa-solid fa-layer-group text-primary-custom fs-1 opacity-25"></i>
+                    <!-- Simulated Heatmap -->
+                    <div class="position-absolute" style="top: 20%; left: 30%; width: 200px; height: 200px; border-radius: 50%; background: radial-gradient(circle, rgba(239,68,68,0.6) 0%, rgba(239,68,68,0) 70%); filter: blur(10px);"></div>
+                    <div class="position-absolute" style="top: 50%; right: 20%; width: 150px; height: 150px; border-radius: 50%; background: radial-gradient(circle, rgba(245,158,11,0.5) 0%, rgba(245,158,11,0) 70%); filter: blur(10px);"></div>
+                </div>
+            </div>
+            <div class="col-lg-5 ps-lg-5 mt-4 mt-lg-0">
+                <h4 class="fw-bold mb-3">Understanding the Heatmap</h4>
+                <p class="text-secondary mb-4">
+                    Gradient-weighted Class Activation Mapping (Grad-CAM) uses the gradients of the classification target flowing into the final convolutional layer to produce a coarse localization map highlighting the important regions in the image for predicting the concept.
+                </p>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="bg-danger rounded" style="width: 24px; height: 24px;"></div>
+                    <span class="small fw-bold">High Importance (Red/Hot)</span>
+                </div>
+                <div class="d-flex align-items-center gap-3 mb-3">
+                    <div class="bg-warning rounded" style="width: 24px; height: 24px;"></div>
+                    <span class="small fw-bold">Medium Importance (Yellow)</span>
+                </div>
+                <div class="d-flex align-items-center gap-3 mb-4">
+                    <div class="bg-primary rounded" style="width: 24px; height: 24px;"></div>
+                    <span class="small fw-bold">Low Importance (Blue/Cold)</span>
+                </div>
+                
+                <hr class="border-secondary opacity-25 my-4">
+                
+                <h6 class="fw-bold mb-2">Model Decision</h6>
+                <p class="text-secondary small">
+                    The model focused on the highlighted irregular glandular structures and hyperchromatic nuclei, which are characteristic features of colonic adenocarcinoma.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Report History - ColonSightAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 gsap-fade-in">
+        <h2 class="fw-bold mb-0">Generated Reports</h2>
+        <a href="{{ url_for('dashboard.index') }}" class="btn btn-premium-outline">Dashboard</a>
+    </div>
+
+    <div class="glass-card p-4 gsap-fade-in">
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr class="text-secondary small">
+                        <th>Report ID</th>
+                        <th>Generated On</th>
+                        <th>Associated Prediction</th>
+                        <th>Format</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><i class="fa-solid fa-file-pdf text-danger me-2"></i> REP-2023-1024</td>
+                        <td>Oct 24, 2023 - 10:45 AM</td>
+                        <td><a href="{{ url_for('prediction.result', prediction_id=1024) }}" class="text-decoration-none">#1024</a></td>
+                        <td>PDF</td>
+                        <td>
+                            <a href="{{ url_for('report.download', report_id=1) }}" class="btn btn-sm btn-primary-custom"><i class="fa-solid fa-download me-1"></i> Download</a>
+                            <form action="{{ url_for('report.delete', report_id=1) }}" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-outline-danger"><i class="fa-solid fa-trash"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

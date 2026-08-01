@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}Research & Dataset - ColonSightAI{% endblock %}
+
+{% block content %}
+<div class="container py-5 mt-5">
+    <div class="text-center mb-5 gsap-fade-in">
+        <h1 class="display-5 fw-bold mb-3">Dataset Information</h1>
+        <p class="text-secondary mx-auto" style="max-width: 600px;">Trained on the highly regarded LC25000 Lung and Colon Histopathological Image Dataset.</p>
+    </div>
+
+    <div class="row justify-content-center mb-5">
+        <div class="col-lg-10 gsap-fade-in">
+            <div class="glass-card p-4">
+                <h4 class="fw-bold mb-4">Dataset Overview</h4>
+                <p class="text-secondary mb-4">
+                    The LC25000 dataset contains 25,000 color images (768 x 768 pixels) of lung and colon tissue patches. For the ColonSightAI project, we focused specifically on the colon tissue subset, which includes:
+                </p>
+                <div class="row g-4 mb-4">
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded border-secondary bg-surface-color-alt text-center">
+                            <h3 class="fw-bold text-primary-custom mb-1">5,000</h3>
+                            <p class="small text-muted mb-0">Colon Adenocarcinoma Images</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="p-3 border rounded border-secondary bg-surface-color-alt text-center">
+                            <h3 class="fw-bold text-success mb-1">5,000</h3>
+                            <p class="small text-muted mb-0">Benign Colonic Tissue Images</p>
+                        </div>
+                    </div>
+                </div>
+                <p class="text-secondary small mb-0">
+                    <i class="fa-solid fa-info-circle text-primary-custom me-1"></i> Data augmentation techniques (random rotations, flips, and color jittering) were applied during training to improve model generalization.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

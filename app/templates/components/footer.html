@@ -1,0 +1,63 @@
+<footer class="footer mt-auto">
+    <div class="container">
+        <div class="row g-4">
+            <!-- Brand Column -->
+            <div class="col-lg-4 col-md-6">
+                <a class="d-flex align-items-center gap-2 mb-3 text-decoration-none" href="{{ url_for('main.landing') }}">
+                    <i class="fa-solid fa-microscope text-primary-custom fs-4"></i>
+                    <span class="fw-bold fs-5 text-primary-custom">ColonSightAI</span>
+                </a>
+                <p class="small text-secondary mb-4 pe-lg-5">
+                    Advanced AI-powered histopathology analysis for rapid and accurate colon cancer detection. Empowering clinicians with state-of-the-art deep learning.
+                </p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="text-secondary hover-text-primary fs-5"><i class="fa-brands fa-github"></i></a>
+                    <a href="#" class="text-secondary hover-text-primary fs-5"><i class="fa-brands fa-twitter"></i></a>
+                    <a href="#" class="text-secondary hover-text-primary fs-5"><i class="fa-brands fa-linkedin"></i></a>
+                </div>
+            </div>
+            
+            <!-- Links Column 1 -->
+            <div class="col-lg-2 col-md-3 col-6">
+                <h6 class="fw-bold mb-3 text-uppercase small">Platform</h6>
+                <ul class="list-unstyled d-flex flex-column gap-2 small">
+                    <li><a href="{{ url_for('main.technology') }}" class="text-secondary text-decoration-none">Technology</a></li>
+                    <li><a href="{{ url_for('main.workflow') }}" class="text-secondary text-decoration-none">AI Workflow</a></li>
+                    <li><a href="{{ url_for('main.dataset') }}" class="text-secondary text-decoration-none">Dataset info</a></li>
+                </ul>
+            </div>
+            
+            <!-- Links Column 2 -->
+            <div class="col-lg-2 col-md-3 col-6">
+                <h6 class="fw-bold mb-3 text-uppercase small">Company</h6>
+                <ul class="list-unstyled d-flex flex-column gap-2 small">
+                    <li><a href="{{ url_for('main.about') }}" class="text-secondary text-decoration-none">About Us</a></li>
+                    <li><a href="{{ url_for('main.research') }}" class="text-secondary text-decoration-none">Research</a></li>
+                    <li><a href="{{ url_for('main.contact') }}" class="text-secondary text-decoration-none">Contact</a></li>
+                </ul>
+            </div>
+            
+            <!-- Newsletter / Contact Column -->
+            <div class="col-lg-4 col-md-12">
+                <h6 class="fw-bold mb-3 text-uppercase small">Stay Updated</h6>
+                <p class="small text-secondary mb-3">Join our newsletter for the latest research updates and platform features.</p>
+                <form class="d-flex gap-2">
+                    <input type="email" class="form-control form-control-sm form-control-custom" placeholder="Email address" aria-label="Email address">
+                    <button class="btn btn-premium btn-sm px-3" type="button">Subscribe</button>
+                </form>
+            </div>
+        </div>
+        
+        <hr class="mt-5 mb-4 border-secondary opacity-25">
+        
+        <div class="row align-items-center small">
+            <div class="col-md-6 text-center text-md-start mb-2 mb-md-0">
+                &copy; {{ range(2023, 2027) | random }} ColonSightAI Project. All rights reserved.
+            </div>
+            <div class="col-md-6 text-center text-md-end">
+                <a href="#" class="text-secondary text-decoration-none me-3">Privacy Policy</a>
+                <a href="#" class="text-secondary text-decoration-none">Terms of Service</a>
+            </div>
+        </div>
+    </div>
+</footer>
