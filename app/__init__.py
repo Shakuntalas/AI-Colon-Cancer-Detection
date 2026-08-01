@@ -64,6 +64,10 @@ def create_app(config_name: str = 'development') -> Flask:
     # ── Ensure runtime directories exist ───────────────────────────────
     _ensure_directories(app)
 
+    # ── Register middleware ────────────────────────────────────────────
+    from app.middleware import register_middleware
+    register_middleware(app)
+
     # ── Register blueprints ────────────────────────────────────────────
     _register_blueprints(app)
 
@@ -104,7 +108,14 @@ def _register_blueprints(app: Flask) -> None:
 def _register_error_handlers(app: Flask) -> None:
     """Register global HTTP error handlers."""
 
-    # TODO: Implement custom error pages in templates/errors/
+    @app.errorhandler(401)
+    def unauthorized(error):  # noqa: F841
+        return {'error': 'Unauthorized access'}, 401
+
+    @app.errorhandler(403)
+    def forbidden(error):  # noqa: F841
+        return {'error': 'Forbidden access'}, 403
+
     @app.errorhandler(404)
     def page_not_found(error):  # noqa: F841
         return {'error': 'Page not found'}, 404

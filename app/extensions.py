@@ -48,11 +48,9 @@ def init_extensions(app: Flask) -> None:
     login_manager.login_message_category = 'info'
     login_manager.session_protection = 'strong'
 
-    # ── User loader callback (placeholder) ────────────────────────────
-    # TODO: Implement user loader once User model is defined
+    # ── User loader callback ──────────────────────────────────────────
     @login_manager.user_loader
     def load_user(user_id):
         """Load a user by their primary key."""
-        # from app.models.user import User
-        # return User.query.get(int(user_id))
-        return None
+        from app.models.user import User
+        return User.query.get(int(user_id))

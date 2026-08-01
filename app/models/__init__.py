@@ -1,11 +1,20 @@
 """
-ColonSightAI — Database Models Package
-========================================
+ColonSightAI — Models Package
+===============================
 
-This package contains SQLAlchemy ORM models for the application.
-
-Models:
-    - **User** — User accounts and authentication
-    - **Patient** — Patient demographic and clinical records
-    - **Prediction** — AI prediction results and metadata
+Exposes all SQLAlchemy models for easy importing and Alembic migrations.
 """
+
+from app.models.user import User
+from app.models.patient import Patient
+from app.models.prediction import Prediction
+from app.models.admin import Admin
+from app.models.history import History
+
+__all__ = [
+    'User',
+    'Patient',
+    'Prediction',
+    'Admin',
+    'History',
+]
