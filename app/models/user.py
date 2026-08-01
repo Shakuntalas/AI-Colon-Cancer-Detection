@@ -23,10 +23,9 @@ Relationships:
     - One-to-Many with Prediction
 """
 
-from app.extensions import db
+from app.extensions import db, bcrypt
 from flask_login import UserMixin
 from datetime import datetime, timezone
-from werkzeug.security import generate_password_hash, check_password_hash
 
 
 class User(UserMixin, db.Model):
@@ -56,11 +55,11 @@ class User(UserMixin, db.Model):
 
     def set_password(self, password: str) -> None:
         """Hash the password and store it."""
-        self.password_hash = generate_password_hash(password)
+        self.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
 
     def check_password(self, password: str) -> bool:
         """Check if the provided password matches the hash."""
-        return check_password_hash(self.password_hash, password)
+        return bcrypt.check_password_hash(self.password_hash, password)
 
     def __repr__(self):
         return f'<User {self.username}>'

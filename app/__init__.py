@@ -45,7 +45,7 @@ def create_app(config_name: str = 'development') -> Flask:
         The configured Flask application instance.
     """
     # ── Create Flask instance ──────────────────────────────────────────
-    app = Flask(
+    flask_app = Flask(
         __name__,
         static_folder='static',
         template_folder='templates',
@@ -53,31 +53,37 @@ def create_app(config_name: str = 'development') -> Flask:
 
     # ── Load configuration ─────────────────────────────────────────────
     config_class = config_map.get(config_name, config_map['development'])
-    app.config.from_object(config_class)
+    flask_app.config.from_object(config_class)
 
     # ── Initialise extensions ──────────────────────────────────────────
-    init_extensions(app)
+    init_extensions(flask_app)
 
     # ── Configure logging ──────────────────────────────────────────────
-    setup_logging(app)
+    setup_logging(flask_app)
 
     # ── Ensure runtime directories exist ───────────────────────────────
-    _ensure_directories(app)
+    _ensure_directories(flask_app)
 
     # ── Register middleware ────────────────────────────────────────────
-    from app.middleware import register_middleware
-    register_middleware(app)
+    from .middleware import register_middleware
+    register_middleware(flask_app)
 
     # ── Register blueprints ────────────────────────────────────────────
-    _register_blueprints(app)
+    _register_blueprints(flask_app)
 
     # ── Register error handlers ────────────────────────────────────────
-    _register_error_handlers(app)
+    _register_error_handlers(flask_app)
 
-    app.logger.info(
+    # ── Initialize database tables ─────────────────────────────────────
+    with flask_app.app_context():
+        from .extensions import db
+        from . import models  # Ensure models are known to SQLAlchemy
+        db.create_all()
+
+    flask_app.logger.info(
         'ColonSightAI application created [config=%s]', config_name
     )
-    return app
+    return flask_app
 
 
 # ═══════════════════════════════════════════════════════════════════════════

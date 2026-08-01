@@ -7,30 +7,35 @@
         <div class="col-md-8 gsap-fade-in">
             <div class="glass-card p-4 text-center mb-4">
                 <div class="bg-primary-custom text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3" style="width: 80px; height: 80px; font-size: 2rem;">
-                    DR
+                    {{ current_user.first_name[0] if current_user.first_name else 'U' }}{{ current_user.last_name[0] if current_user.last_name else '' }}
                 </div>
-                <h3 class="fw-bold">Dr. John Doe</h3>
-                <p class="text-secondary mb-0">Pathologist at General Hospital</p>
+                <h3 class="fw-bold">{{ current_user.first_name }} {{ current_user.last_name }}</h3>
+                <p class="text-secondary mb-0">Role: {{ current_user.role|capitalize }}</p>
             </div>
             
             <div class="glass-card p-4">
                 <h4 class="fw-bold mb-4">Edit Profile</h4>
-                <form>
+                <form action="{{ url_for('dashboard.profile') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="row g-3 mb-3">
                         <div class="col-md-6">
                             <label class="form-label small fw-medium">First Name</label>
-                            <input type="text" class="form-control form-control-custom" value="John">
+                            <input type="text" name="first_name" class="form-control form-control-custom" value="{{ current_user.first_name }}">
                         </div>
                         <div class="col-md-6">
                             <label class="form-label small fw-medium">Last Name</label>
-                            <input type="text" class="form-control form-control-custom" value="Doe">
+                            <input type="text" name="last_name" class="form-control form-control-custom" value="{{ current_user.last_name }}">
                         </div>
                     </div>
                     <div class="mb-4">
                         <label class="form-label small fw-medium">Email Address</label>
-                        <input type="email" class="form-control form-control-custom" value="john.doe@example.com">
+                        <input type="email" name="email" class="form-control form-control-custom" value="{{ current_user.email }}">
                     </div>
-                    <button type="button" class="btn btn-premium">Update Profile</button>
+                    <div class="mb-4">
+                        <label class="form-label small fw-medium">Change Password (leave blank to keep current)</label>
+                        <input type="password" name="password" class="form-control form-control-custom" placeholder="New Password">
+                    </div>
+                    <button type="submit" class="btn btn-premium">Update Profile</button>
                 </form>
             </div>
         </div>

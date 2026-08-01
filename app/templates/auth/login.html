@@ -13,19 +13,20 @@
                 </div>
                 
                 <form action="{{ url_for('auth.login') }}" method="POST">
+                    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                     <div class="mb-3">
                         <label class="form-label small fw-medium">Email Address</label>
-                        <input type="email" class="form-control form-control-custom" placeholder="name@example.com" required>
+                        <input type="email" name="email" class="form-control form-control-custom" placeholder="name@example.com" required>
                     </div>
                     <div class="mb-4">
                         <div class="d-flex justify-content-between align-items-center mb-1">
                             <label class="form-label small fw-medium mb-0">Password</label>
                             <a href="{{ url_for('auth.forgot_password') }}" class="small text-decoration-none">Forgot password?</a>
                         </div>
-                        <input type="password" class="form-control form-control-custom" placeholder="••••••••" required>
+                        <input type="password" name="password" class="form-control form-control-custom" placeholder="••••••••" required>
                     </div>
                     <div class="mb-4 form-check">
-                        <input type="checkbox" class="form-check-input" id="rememberMe">
+                        <input type="checkbox" name="remember" class="form-check-input" id="rememberMe">
                         <label class="form-check-label small" for="rememberMe">Remember me</label>
                     </div>
                     
