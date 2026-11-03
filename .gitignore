@@ -267,6 +267,7 @@ heatmaps/*
 reports/*
 !reports/.gitkeep
 !reports/README.md
+!reports/model_evaluation_audit_report.md
 
 trained_models/*.h5
 trained_models/*.hdf5

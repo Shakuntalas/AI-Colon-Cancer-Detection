@@ -70,15 +70,21 @@ def upload():
             preprocessor = ImagePreprocessor()
             tensor = preprocessor.preprocess(file_path)
             
-            model = ModelLoader().get_model()
+            # Resolve model (local if available, None if remote inference configured)
+            model = None
+            try:
+                model = ModelLoader().get_model()
+            except Exception as model_err:
+                current_app.logger.info("Local model loader skipped/failed: %s", model_err)
+
             predictor = Predictor()
-            result = predictor.predict(tensor, model)
+            result = predictor.predict(tensor, model, image_path=file_path)
             
             # Grad-CAM
             gradcam_gen = GradCAMGenerator()
             # Predictor predicted index can be inferred from probability dict or just re-calculate
             predicted_index = 0 if result['predicted_class'] == 'colon_aca' else 1
-            heatmap_path_abs = gradcam_gen.generate(file_path, model, predicted_index)
+            heatmap_path_abs = gradcam_gen.generate(file_path, model, predicted_index, last_prediction_result=result)
             
             # Report
             report_dir = current_app.config['REPORT_FOLDER']
@@ -106,7 +112,7 @@ def upload():
         except Exception as e:
             current_app.logger.error(f"Prediction failed: {e}\n{traceback.format_exc()}")
             db.session.rollback()
-            flash(f"An error occurred during prediction: {e}", 'danger')
+            flash(f"{e}", 'danger')
             return redirect(url_for('prediction.index'))
             
     flash('Invalid file type. Allowed: PNG, JPG, JPEG, TIFF', 'warning')

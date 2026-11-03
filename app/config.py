@@ -58,9 +58,10 @@ class BaseConfig:
     ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'tif', 'tiff', 'bmp'}
 
     # ── AI Model ──────────────────────────────────────────────────────
-    MODEL_PATH = os.path.join(BASE_DIR, 'data', 'models', 'efficientnetb0_colon.h5')
+    MODEL_PATH = os.path.join(BASE_DIR, 'trained_models', 'efficientnetb0_colon.h5')
     MODEL_IMAGE_SIZE = int(os.getenv('MODEL_IMAGE_SIZE', 224))
     CONFIDENCE_THRESHOLD = float(os.getenv('CONFIDENCE_THRESHOLD', 0.5))
+    REMOTE_INFERENCE_URL = os.getenv('REMOTE_INFERENCE_URL', None)
 
     # ── Session / Cookie ──────────────────────────────────────────────
     SESSION_COOKIE_HTTPONLY = True

@@ -40,6 +40,7 @@ class ModelLoader:
     _instance = None
     _model = None
     _is_loaded = False
+    _load_error = None
 
     def __new__(cls):
         """Enforce singleton pattern."""
@@ -47,45 +48,67 @@ class ModelLoader:
             cls._instance = super().__new__(cls)
         return cls._instance
 
+    def get_load_error(self):
+        """Return the exception encountered when loading the model, if any."""
+        return self._load_error
+
     def get_model(self):
         """
         Return the loaded Keras model, loading it from disk if necessary.
 
         Returns
         -------
-        tf.keras.Model
-            The loaded EfficientNetB0 model.
-
-        Raises
-        ------
-        FileNotFoundError
-            If the model weights file does not exist.
-        RuntimeError
-            If the model fails to load.
+        tf.keras.Model or None
+            The loaded EfficientNetB0 model, or None if using remote inference.
         """
-        if not self._is_loaded:
+        if not self._is_loaded and self._load_error is None:
             self._load_model()
         return self._model
 
     def _load_model(self):
-        """Load the model weights from disk."""
-        import tensorflow as tf
+        """Load the model weights from disk or initialize remote inference."""
+        remote_url = os.getenv('REMOTE_INFERENCE_URL')
+        if remote_url:
+            logger.info('Remote inference URL configured: %s. Local TensorFlow model loading skipped.', remote_url)
+            self._is_loaded = True
+            return
 
         if not os.path.exists(MODEL_PATH):
-            raise FileNotFoundError(
+            err = FileNotFoundError(
                 f'Model file not found: {MODEL_PATH}. '
                 'Please train the model first using scripts/train_model.py'
             )
+            self._load_error = err
+            raise err
 
         logger.info('Loading %s model from %s ...', MODEL_NAME, MODEL_PATH)
-        self._model = tf.keras.models.load_model(MODEL_PATH)
-        self._is_loaded = True
-        logger.info(
-            '%s v%s loaded successfully. '
-            'Input shape: %s, Output classes: %s',
-            MODEL_NAME, MODEL_VERSION,
-            self._model.input_shape, self._model.output_shape,
-        )
+        try:
+            import tensorflow as tf
+            self._model = tf.keras.models.load_model(MODEL_PATH)
+            self._is_loaded = True
+            logger.info(
+                '%s v%s loaded successfully. '
+                'Input shape: %s, Output classes: %s',
+                MODEL_NAME, MODEL_VERSION,
+                self._model.input_shape, self._model.output_shape,
+            )
+        except (ImportError, OSError) as err:
+            self._load_error = err
+            err_str = str(err)
+            if 'Application Control policy' in err_str or '_pywrap_utils' in err_str:
+                logger.error(
+                    'Windows Code Integrity / Smart App Control blocked local TensorFlow (_pywrap_utils.pyd).\n'
+                    'Policy ID: {0283AC0F-FFF1-49AE-ADA1-8A933130CAD6}\n'
+                    'To run predictions: Configure REMOTE_INFERENCE_URL in .env (e.g. Google Colab) '
+                    'or execute in WSL2 / Linux.'
+                )
+            else:
+                logger.error('Failed to load TensorFlow locally: %s', err)
+
+            if not remote_url:
+                raise RuntimeError(
+                    f'TensorFlow could not be loaded due to Windows Code Integrity Policy: {err}'
+                ) from err
 
     def is_loaded(self):
         """Check if the model is currently loaded in memory."""
